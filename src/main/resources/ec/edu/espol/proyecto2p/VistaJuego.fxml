@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="MainPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ec.edu.espol.proyecto2p.VistaJuegoController">
+   <left>
+      <Pane fx:id="J1Panel" prefHeight="410.0" prefWidth="150.0" BorderPane.alignment="CENTER" />
+   </left>
+   <right>
+      <Pane fx:id="J2Panel" prefHeight="410.0" prefWidth="150.0" BorderPane.alignment="CENTER" />
+   </right>
+   <top>
+      <Pane prefHeight="37.0" prefWidth="854.0" BorderPane.alignment="CENTER" />
+   </top>
+   <center>
+      <BorderPane fx:id="TableroPanel" prefHeight="426.0" prefWidth="554.0" BorderPane.alignment="CENTER">
+         <bottom>
+            <Label fx:id="lblQuienJuega" alignment="CENTER" contentDisplay="CENTER" text="Turno del jugador: " textAlignment="CENTER" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="Arial" size="24.0" />
+               </font>
+            </Label>
+         </bottom>
+         <center>
+            <HBox fx:id="HboxContainer" alignment="CENTER" style="-fx-background-color: white;" BorderPane.alignment="CENTER" />
+         </center></BorderPane>
+   </center>
+</BorderPane>
