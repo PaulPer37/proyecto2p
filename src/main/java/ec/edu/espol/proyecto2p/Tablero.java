@@ -107,27 +107,42 @@ public class Tablero{
         return this.getTablero().get(getTableroSize()-1).getFichaReferenciada().getLado2();
     }
 
-    public void moverFichaButton(Pane jPane, FichaButton fichaButton, Jugador jugador){
+    public boolean moverFichaButton(Pane jPane, FichaButton fichaButton, Jugador jugador){
         //Quitarla de la mano del jugador
         jugador.getMano().remove(fichaButton.getFichaReferenciada());
         
-        //Quitarla del panel del jugador y rastrear en que posicion del tablero se debe poner
-        int position;
-        if (tablero.isEmpty()){
-            HboxContainer.getChildren().add(fichaButton);
-        }
-        if (fichaButton.getFichaReferenciada().getLado2() == this.getLeftMostNum()) {
-            position = 0;
+        int position = 0 ;
+        if (tablero.isEmpty()) {
+            jPane.getChildren().remove(fichaButton);
+            if (!HboxContainer.getChildren().contains(fichaButton)) {
+                HboxContainer.getChildren().add(position, fichaButton);
+                HboxContainer.requestLayout();
+                fichaButton.setStyle("-fx-background-color: black");
+                tablero.add(position,fichaButton);
+                return true;
+            }
         }else{
-            position = this.getTableroSize()-1;
+            if (fichaButton.getFichaReferenciada().getLado2()==this.getLeftMostNum()) {
+                if (!HboxContainer.getChildren().contains(fichaButton)) {
+                    HboxContainer.getChildren().add(position, fichaButton);
+                    HboxContainer.requestLayout();
+                    fichaButton.setStyle("-fx-background-color: black");
+                    tablero.add(position,fichaButton);
+                    return true;
+                }
+            }
+            if (fichaButton.getFichaReferenciada().getLado1()==this.getRightMostNum()){
+                position = this.getTableroSize();
+                if (!HboxContainer.getChildren().contains(fichaButton)) {
+                    HboxContainer.getChildren().add(position, fichaButton);
+                    HboxContainer.requestLayout();
+                    fichaButton.setStyle("-fx-background-color: black");
+                    tablero.add(position,fichaButton);
+                    return true;
+                }
+            }
         }
-        jPane.getChildren().remove(fichaButton);
-        if (!HboxContainer.getChildren().contains(fichaButton)) {
-            HboxContainer.getChildren().add(position,fichaButton);
-            HboxContainer.requestLayout();
-            fichaButton.setStyle("-fx-background-color: black");
-            
-        }
+        return false;
     }
     
      public void addTurnoListener(Jugador jugador, Pane JPane, HBox HboxContainer, Label lblQuienJuega) {
