@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 public class Jugador{
     private final String nombre;
     private List<Ficha>mano = new ArrayList<>();
+    
     public Jugador(String n, List<Ficha> mano){
         this.nombre = n;
         this.mano = mano;

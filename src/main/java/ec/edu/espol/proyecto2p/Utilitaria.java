@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 public class Utilitaria{
+    static ArrayList <Ficha> fichasCreadas = new ArrayList<>();
     public static List<Ficha> crearManoJugador(){
         List<Ficha> mano = new ArrayList<>();
         Random random = new Random();

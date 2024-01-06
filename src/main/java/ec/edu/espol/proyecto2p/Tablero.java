@@ -118,6 +118,7 @@ public class Tablero{
                 HboxContainer.getChildren().add(position, fichaButton);
                 HboxContainer.requestLayout();
                 fichaButton.setStyle("-fx-background-color: black");
+                
                 tablero.add(position,fichaButton);
                 return true;
             }
@@ -166,9 +167,7 @@ public class Tablero{
                 .forEach(fichaButton -> {
                     Animaciones.animar_boton(fichaButton);
                     fichaButton.setOnMouseClicked(event -> {
-                        
                         jugador.jugarFicha(this, JPane, fichaButton,jugadorSiguiente);
-                        
                         updateTurnoLabel(lblQuienJuega, jugadorSiguiente);
                         Animaciones.desanimar_boton(fichaButton);
                     });
