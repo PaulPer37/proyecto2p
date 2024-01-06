@@ -166,8 +166,9 @@ public class Tablero{
                 .forEach(fichaButton -> {
                     Animaciones.animar_boton(fichaButton);
                     fichaButton.setOnMouseClicked(event -> {
-                        jugador.jugarFicha(this, JPane, fichaButton);
-                        this.setTurnoDeJugador(jugadorSiguiente);
+                        
+                        jugador.jugarFicha(this, JPane, fichaButton,jugadorSiguiente);
+                        
                         updateTurnoLabel(lblQuienJuega, jugadorSiguiente);
                         Animaciones.desanimar_boton(fichaButton);
                     });

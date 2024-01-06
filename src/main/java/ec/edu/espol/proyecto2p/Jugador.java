@@ -57,10 +57,10 @@ public class Jugador{
         return this.mano;
     }
     
-    public void jugarFicha(Tablero tablero,Pane JPane,FichaButton fichaButton){
+    public void jugarFicha(Tablero tablero,Pane JPane,FichaButton fichaButton, Jugador jugadorSiguiente){
         if (tablero.isLegalMove(fichaButton)){
             tablero.moverFichaButton(JPane, fichaButton, this);
-            tablero.setTurnoDeJugador(this);
+            tablero.setTurnoDeJugador(jugadorSiguiente);
         }else{
             new Alert(Alert.AlertType.WARNING,"¡Ficha no válida!").show();
             tablero.setTurnoDeJugador(this);
