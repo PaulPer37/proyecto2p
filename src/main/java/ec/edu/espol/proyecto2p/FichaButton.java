@@ -1,6 +1,7 @@
 package ec.edu.espol.proyecto2p;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
