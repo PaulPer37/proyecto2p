@@ -60,6 +60,7 @@ public class Jugador{
     
     public void jugarFicha(Tablero tablero,Pane JPane,FichaButton fichaButton, Jugador jugadorSiguiente){
         if (tablero.isLegalMove(fichaButton)){
+            
             tablero.moverFichaButton(JPane, fichaButton, this);
             tablero.setTurnoDeJugador(jugadorSiguiente);
         }else{

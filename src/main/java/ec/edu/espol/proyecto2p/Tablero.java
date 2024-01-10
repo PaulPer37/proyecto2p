@@ -8,8 +8,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -89,14 +92,17 @@ public class Tablero{
             List<Object>lista = FichaButton.comodin();
             Image img = null;
             String lado = (String)lista.get(0);
+            
             int numero = (int)lista.get(1);
             if(lado.equals("Izquierda")){
+                
                 fichaButton.getFichaReferenciada().setLado1(numero);
                 img = new Image("img/"+fichaButton.getFichaReferenciada().getLado1()+"-"+0+".jpg");
+        
             }else{
                 fichaButton.getFichaReferenciada().setLado2(numero);
                 
-                img = new Image("img/"+0+"-"+fichaButton.getFichaReferenciada().getLado1()+".jpg");
+                img = new Image("img/"+0+"-"+fichaButton.getFichaReferenciada().getLado2()+".jpg");
             }
             
             fichaButton = new FichaButton(fichaButton.getFichaReferenciada(),img);
