@@ -1,6 +1,7 @@
 package ec.edu.espol.proyecto2p;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -8,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -83,7 +85,23 @@ public class Tablero{
         if (tablero.isEmpty()){
             fichasEnJuego++;
             return true;
-        } else {
+        } else if(leftSide == -1){
+            List<Object>lista = FichaButton.comodin();
+            Image img = null;
+            String lado = (String)lista.get(0);
+            int numero = (int)lista.get(1);
+            if(lado.equals("Izquierda")){
+                fichaButton.getFichaReferenciada().setLado1(numero);
+                img = new Image("img/"+fichaButton.getFichaReferenciada().getLado1()+"-"+0+".jpg");
+            }else{
+                fichaButton.getFichaReferenciada().setLado2(numero);
+                
+                img = new Image("img/"+0+"-"+fichaButton.getFichaReferenciada().getLado1()+".jpg");
+            }
+            
+            fichaButton = new FichaButton(fichaButton.getFichaReferenciada(),img);
+            return true;
+        }else {
             int checkLeft = this.getLeftMostNum();
             int checkRight = this.getRightMostNum();
             if (rightSide == checkLeft){ //Retorna verdadero si no encuentra fichas en el tablero aun(recien empieza el juego) y luego da preferencia a revisar si el lado izquierdo de la ficha a querer jugar coincide con el lado derecho de la ultima ficha en el tablero
@@ -122,7 +140,7 @@ public class Tablero{
                 return true;
             }
         }else{
-            if (fichaButton.getFichaReferenciada().getLado2()==this.getLeftMostNum()) {
+            if (fichaButton.getFichaReferenciada().getLado2()==this.getLeftMostNum()||fichaButton.getFichaReferenciada().getLado2()==-1) {
                 if (!HboxContainer.getChildren().contains(fichaButton)) {
                     HboxContainer.getChildren().add(position, fichaButton);
                     HboxContainer.requestLayout();
@@ -131,7 +149,7 @@ public class Tablero{
                     return true;
                 }
             }
-            if (fichaButton.getFichaReferenciada().getLado1()==this.getRightMostNum()){
+            if (fichaButton.getFichaReferenciada().getLado1()==this.getRightMostNum()||fichaButton.getFichaReferenciada().getLado1()==-1){
                 position = this.getTableroSize();
                 if (!HboxContainer.getChildren().contains(fichaButton)) {
                     HboxContainer.getChildren().add(position, fichaButton);

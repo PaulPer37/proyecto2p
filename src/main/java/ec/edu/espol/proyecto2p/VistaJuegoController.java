@@ -39,4 +39,5 @@ public class VistaJuegoController implements Initializable {
         tablero.addTurnoListener(j2, J2Panel, HboxContainer, lblQuienJuega);
         
     }
+     
 }

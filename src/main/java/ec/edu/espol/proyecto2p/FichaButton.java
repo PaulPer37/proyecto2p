@@ -1,7 +1,12 @@
 package ec.edu.espol.proyecto2p;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Optional;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -86,5 +91,60 @@ public class FichaButton extends Button {
         });
     
     }
-    
+    public static List<Object> comodin() {
+        // Opciones para la dirección
+        List<String> choices = Arrays.asList("Izquierda", "Derecha");
+        List<Object> lista = new ArrayList<>();
+
+        // Crear un ChoiceDialog para la dirección
+        ChoiceDialog<String> directionDialog = new ChoiceDialog<>(choices.get(0), choices);
+        directionDialog.setTitle("Alerta con Selección");
+        directionDialog.setHeaderText("Elige una dirección:");
+        directionDialog.setContentText("Dirección:");
+
+        // Mostrar y esperar hasta que el usuario seleccione una dirección
+        Optional<String> selectedDirection = directionDialog.showAndWait();
+
+        // Variables para almacenar la entrada del usuario
+        String numberStr;
+        int number;
+
+        // Bucle do-while para solicitar un número válido
+        do {
+            // Crear un TextInputDialog para el número
+            TextInputDialog numberDialog = new TextInputDialog("1");
+            numberDialog.setTitle("Alerta con Ingreso");
+            numberDialog.setHeaderText("Ingresa un número del 1 al 6:");
+            numberDialog.setContentText("Número:");
+
+            // Mostrar y esperar hasta que el usuario ingrese un número
+            Optional<String> enteredNumber = numberDialog.showAndWait();
+
+            // Obtener la entrada del usuario y validar si es un número válido
+            numberStr = enteredNumber.orElse("0"); // Valor predeterminado si no se ingresa nada
+            try {
+                number = Integer.parseInt(numberStr);
+            } catch (NumberFormatException e) {
+                number = 0; // Establecer un valor que no esté en el rango para continuar el bucle
+            }
+
+            
+        } while (number < 1 || number > 6);
+
+        // Procesar las selecciones e ingresos
+        if (selectedDirection.isPresent()) {
+            String direction = selectedDirection.get(); 
+            lista.add(direction);
+            lista.add(number);
+            // Mostrar una alerta informativa con las selecciones
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Alerta");
+            alert.setHeaderText(null);
+            alert.setContentText("Dirección seleccionada: " + direction + "\nNúmero ingresado: " + number);
+            alert.showAndWait();
+        }
+        
+        
+        return lista;
+}
 }
