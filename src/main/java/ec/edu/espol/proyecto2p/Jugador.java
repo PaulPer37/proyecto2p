@@ -68,4 +68,16 @@ public class Jugador{
             tablero.setTurnoDeJugador(this);
         }
     }
+    public boolean tieneFichasValidas(Tablero tablero) {
+    for (Ficha ficha : mano) {
+        FichaButton fichaButton = new FichaButton(ficha, new Image("img/" + ficha.getFile()));
+        if(ficha instanceof FichaComodin){
+            return true;
+        }
+        if (tablero.isLegalMove(fichaButton)) {
+            return true;
+        }
+    }
+    return false;
+}
 }

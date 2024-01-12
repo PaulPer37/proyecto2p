@@ -148,4 +148,8 @@ public class FichaButton extends Button {
         
         return lista;
 }
+    public void cambiarImagen(Image nuevaImagen) {
+    ImageView imageView = (ImageView) this.getGraphic();
+    imageView.setImage(nuevaImagen);
+}
 }

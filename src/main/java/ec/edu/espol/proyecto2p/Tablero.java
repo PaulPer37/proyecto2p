@@ -106,6 +106,9 @@ public class Tablero{
             }
             
             fichaButton = new FichaButton(fichaButton.getFichaReferenciada(),img);
+            if (fichaButton.getFichaReferenciada() instanceof FichaComodin) {
+        fichaButton.setGraphic(new ImageView(img));
+    }
             return true;
         }else {
             int checkLeft = this.getLeftMostNum();
@@ -153,6 +156,10 @@ public class Tablero{
                     HboxContainer.requestLayout();
                     fichaButton.setStyle("-fx-background-color: black");
                     tablero.add(position,fichaButton);
+                    if (jugador.getMano().isEmpty()) {
+    new Alert(AlertType.INFORMATION, "¡" + jugador.getNombre() + " ha ganado!").showAndWait();
+    System.exit(0); // Cerrar la aplicación
+}
                     return true;
                 }
             }
@@ -163,6 +170,10 @@ public class Tablero{
                     HboxContainer.requestLayout();
                     fichaButton.setStyle("-fx-background-color: black");
                     tablero.add(position,fichaButton);
+                    if (jugador.getMano().isEmpty()) {
+    new Alert(AlertType.INFORMATION, "¡" + jugador.getNombre() + " ha ganado!").showAndWait();
+    System.exit(0); // Cerrar la aplicación
+}
                     return true;
                 }
             }
@@ -180,7 +191,10 @@ public class Tablero{
         Jugador jugadorSiguiente = this.getJugadores().get(indiceJugadorSiguiente);
         turnoDeJugadorProperty.addListener((obs, oldTurno, newTurno) -> {
         if (newTurno.equals(jugador)) {
-            //Si es el turno de este jugador, animar los botones y que pueda mover sus fichas
+            if (!jugador.tieneFichasValidas(this)) {
+    new Alert(AlertType.WARNING, "¡" + jugador.getNombre() + " ha perdido!").showAndWait();
+    System.exit(0); // Cerrar la aplicación
+}//Si es el turno de este jugador, animar los botones y que pueda mover sus fichas
             JPane.getChildren().stream()
                 .filter(node -> node instanceof VBox)
                 .map(node -> (VBox) node)
@@ -249,4 +263,18 @@ public class Tablero{
             bp.setBottom(lblQuienJuega);
         }
     }
+    public void checkJugadorSinFichas(Jugador jugador) {
+    boolean tieneFichasUtilizables = jugador.getMano().stream()
+            .anyMatch(ficha -> isLegalMove(new FichaButton(ficha, null)));
+    
+
+    if (!tieneFichasUtilizables) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Juego Terminado");
+        alert.setHeaderText(null);
+        alert.setContentText("¡El jugador " + jugador.getNombre() + " no tiene fichas utilizables! Fin del juego.");
+        alert.showAndWait();
+        System.exit(0); // Otra opción podría ser cerrar la aplicación de manera más controlada
+    }
+}
 }
