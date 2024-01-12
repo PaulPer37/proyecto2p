@@ -171,7 +171,7 @@ public class Tablero{
     }
     
      public void addTurnoListener(Jugador jugador, Pane JPane, HBox HboxContainer, Label lblQuienJuega) {
-
+        
         boolean esSuTurno = turnoDeJugador.equals(jugador);
 
         int indiceJugador = this.getJugadores().indexOf(jugador);
@@ -211,11 +211,13 @@ public class Tablero{
                 });
             }
         });
+        
             if (esSuTurno) {
                     this.setTurnoDeJugador(jugador);
             }
+            
      }
-    
+ 
     public void updateTurnoLabel(Label lblQuienJuega, Jugador nuevoTurno) { //Esta wea no funciona y no se por q
         lblQuienJuega.setText("Turno del jugador: " + nuevoTurno.getNombre());
         lblQuienJuega.setFont(new Font("Arial", 24));
