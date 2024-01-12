@@ -2,8 +2,11 @@ package ec.edu.espol.proyecto2p;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -37,6 +40,15 @@ public class VistaJuegoController implements Initializable {
         tablero.tableroDisplaysOn(MainPanel,TableroPanel);
         tablero.addTurnoListener(j1, J1Panel, HboxContainer, lblQuienJuega);
         tablero.addTurnoListener(j2, J2Panel, HboxContainer, lblQuienJuega);
+        HboxContainer.setOnMouseEntered((t) -> {
+            ObservableList<Node> children = HboxContainer.getChildren();
+            for (Node node : children) {
+                if (node instanceof FichaButton) {
+                    FichaButton fichaButton = (FichaButton) node;
+                    fichaButton.setOnMouseClicked(null);
+                }
+            }
+        });
     }
      
 }

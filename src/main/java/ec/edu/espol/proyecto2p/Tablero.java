@@ -139,7 +139,7 @@ public class Tablero{
         jugador.getMano().remove(fichaButton.getFichaReferenciada());
         
         int position = 0 ;
-        if (tablero.isEmpty()) {
+        if (tablero.isEmpty()){
             jPane.getChildren().remove(fichaButton);
             if (!HboxContainer.getChildren().contains(fichaButton)) {
                 HboxContainer.getChildren().add(position, fichaButton);
@@ -157,9 +157,9 @@ public class Tablero{
                     fichaButton.setStyle("-fx-background-color: black");
                     tablero.add(position,fichaButton);
                     if (jugador.getMano().isEmpty()) {
-    new Alert(AlertType.INFORMATION, "¡" + jugador.getNombre() + " ha ganado!").showAndWait();
-    System.exit(0); // Cerrar la aplicación
-}
+                        new Alert(AlertType.INFORMATION, "¡" + jugador.getNombre() + " ha ganado!").showAndWait();
+                        System.exit(0); // Cerrar la aplicación
+                    }
                     return true;
                 }
             }
@@ -171,9 +171,9 @@ public class Tablero{
                     fichaButton.setStyle("-fx-background-color: black");
                     tablero.add(position,fichaButton);
                     if (jugador.getMano().isEmpty()) {
-    new Alert(AlertType.INFORMATION, "¡" + jugador.getNombre() + " ha ganado!").showAndWait();
-    System.exit(0); // Cerrar la aplicación
-}
+                        new Alert(AlertType.INFORMATION, "¡" + jugador.getNombre() + " ha ganado!").showAndWait();
+                        System.exit(0); // Cerrar la aplicación
+                    }
                     return true;
                 }
             }
