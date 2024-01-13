@@ -95,8 +95,6 @@ public class FichaButton extends Button {
     }
     
     public void resizeItself(){
-        int parentHeight=0;
-        int parentWidth=0;
         double buttonWidth;
         double buttonHeight;
         if (this.getParent()!=null){

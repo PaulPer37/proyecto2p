@@ -60,7 +60,6 @@ public class Jugador{
     
     public void jugarFicha(Tablero tablero,Pane JPane,FichaButton fichaButton, Jugador jugadorSiguiente){
         if (tablero.isLegalMove(fichaButton)){
-            
             tablero.moverFichaButton(JPane, fichaButton, this);
             tablero.setTurnoDeJugador(jugadorSiguiente);
         }else{
@@ -69,15 +68,15 @@ public class Jugador{
         }
     }
     public boolean tieneFichasValidas(Tablero tablero) {
-    for (Ficha ficha : mano) {
-        FichaButton fichaButton = new FichaButton(ficha, new Image("img/" + ficha.getFile()));
-        if(ficha instanceof FichaComodin){
-            return true;
+        for (Ficha ficha : mano) {
+            FichaButton fichaButton = new FichaButton(ficha, new Image("img/" + ficha.getFile()));
+            if(ficha instanceof FichaComodin){
+                return true;
+            }
+            if (tablero.isLegalMove(fichaButton)) {
+                return true;
+            }
         }
-        if (tablero.isLegalMove(fichaButton)) {
-            return true;
-        }
+        return false;
     }
-    return false;
-}
 }

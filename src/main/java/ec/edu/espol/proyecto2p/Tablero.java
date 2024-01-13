@@ -97,12 +97,10 @@ public class Tablero{
             if(lado.equals("Izquierda")){
                 fichaButton.getFichaReferenciada().setLado1(numero);
                 img = new Image("img/"+fichaButton.getFichaReferenciada().getLado1()+"-0.jpg");
-        
             }else{
                 fichaButton.getFichaReferenciada().setLado2(numero);
                 img = new Image("img/0-"+fichaButton.getFichaReferenciada().getLado2()+".jpg");
             }
-            if (fichaButton.getFichaReferenciada() instanceof FichaComodin) {
                 ImageView imageView = new ImageView(img);
                 imageView.setPreserveRatio(true);
                 imageView.setSmooth(true);
@@ -110,7 +108,6 @@ public class Tablero{
                 fichaButton.setGraphic(imageView);
                 fichaButton.resizeItself();
                 fichaButton.requestLayout();
-            }
             return true;
         }else {
             int checkLeft = this.getLeftMostNum();
@@ -184,19 +181,17 @@ public class Tablero{
     }
     
      public void addTurnoListener(Jugador jugador, Pane JPane, HBox HboxContainer, Label lblQuienJuega) {
-        
         boolean esSuTurno = turnoDeJugador.equals(jugador);
-
         int indiceJugador = this.getJugadores().indexOf(jugador);
         int indiceJugadorSiguiente = (indiceJugador + 1) % this.getJugadores().size();
-        
         Jugador jugadorSiguiente = this.getJugadores().get(indiceJugadorSiguiente);
+        
         turnoDeJugadorProperty.addListener((obs, oldTurno, newTurno) -> {
         if (newTurno.equals(jugador)) {
             if (!jugador.tieneFichasValidas(this)) {
-    new Alert(AlertType.WARNING, "¡" + jugador.getNombre() + " ha perdido!").showAndWait();
-    System.exit(0); // Cerrar la aplicación
-}//Si es el turno de este jugador, animar los botones y que pueda mover sus fichas
+                new Alert(AlertType.WARNING, "¡" + jugador.getNombre() + " ha perdido!").showAndWait();
+                System.exit(0); // Cerrar la aplicación
+            }//Si es el turno de este jugador, animar los botones y que pueda mover sus fichas
             JPane.getChildren().stream()
                 .filter(node -> node instanceof VBox)
                 .map(node -> (VBox) node)
@@ -228,9 +223,9 @@ public class Tablero{
             }
         });
         
-            if (esSuTurno) {
-                    this.setTurnoDeJugador(jugador);
-            }
+        if (esSuTurno) {
+            this.setTurnoDeJugador(jugador);
+        }
             
      }
  
@@ -266,17 +261,16 @@ public class Tablero{
         }
     }
     public void checkJugadorSinFichas(Jugador jugador) {
-    boolean tieneFichasUtilizables = jugador.getMano().stream()
-            .anyMatch(ficha -> isLegalMove(new FichaButton(ficha, null)));
-    
+        boolean tieneFichasUtilizables = jugador.getMano().stream()
+                .anyMatch(ficha -> isLegalMove(new FichaButton(ficha, null)));
 
-    if (!tieneFichasUtilizables) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Juego Terminado");
-        alert.setHeaderText(null);
-        alert.setContentText("¡El jugador " + jugador.getNombre() + " no tiene fichas utilizables! Fin del juego.");
-        alert.showAndWait();
-        System.exit(0); // Otra opción podría ser cerrar la aplicación de manera más controlada
+        if (!tieneFichasUtilizables) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Juego Terminado");
+            alert.setHeaderText(null);
+            alert.setContentText("¡El jugador " + jugador.getNombre() + " no tiene fichas utilizables! Fin del juego.");
+            alert.showAndWait();
+            System.exit(0); // Otra opción podría ser cerrar la aplicación de manera más controlada
+        }
     }
-}
 }

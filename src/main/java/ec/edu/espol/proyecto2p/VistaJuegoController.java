@@ -3,7 +3,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -50,5 +49,24 @@ public class VistaJuegoController implements Initializable {
             }
         });
     }
-     
+    
+    public void jugar1vsIA(){
+        Jugador j1 = new Jugador("Jugador1", (ArrayList<Ficha>) Utilitaria.crearManoJugador());
+        Jugador j2 = new Jugador("Computadora", (ArrayList<Ficha>) Utilitaria.crearManoJugador());
+        j1.cargarFichasJugador(J1Panel);
+        j2.cargarFichasJugador(J2Panel);
+        Tablero tablero = new Tablero(j1,j2, TableroPanel,HboxContainer);
+        tablero.tableroDisplaysOn(MainPanel,TableroPanel);
+        tablero.addTurnoListener(j1, J1Panel, HboxContainer, lblQuienJuega);
+        //Falta el turno de la maquina
+        HboxContainer.setOnMouseEntered((t) -> {
+            ObservableList<Node> children = HboxContainer.getChildren();
+            for (Node node : children) {
+                if (node instanceof FichaButton) {
+                    FichaButton fichaButton = (FichaButton) node;
+                    fichaButton.setOnMouseClicked(null);
+                }
+            }
+        });
+    }
 }

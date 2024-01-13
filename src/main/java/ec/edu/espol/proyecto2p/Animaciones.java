@@ -1,9 +1,11 @@
 package ec.edu.espol.proyecto2p;
 
 import javafx.animation.Interpolator;
+import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.control.Button;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -17,6 +19,32 @@ public abstract class Animaciones {
         button.setOnMouseExited((event) -> {
             button.setBlendMode(null);
         });
+    }
+    
+    public static void agrandar_boton(Button button) {
+        ImageView imview = (ImageView) button.getGraphic();
+        ScaleTransition scaleIn = new ScaleTransition(Duration.millis(500), imview);
+
+        scaleIn.setFromX(1.0);
+        scaleIn.setFromY(1.0);
+        scaleIn.setToX(1.2);
+        scaleIn.setToY(1.2);
+
+        // Reproducir la transición
+        scaleIn.play();
+    }
+
+    public static void achicar_boton(Button button) {
+        ImageView imview = (ImageView) button.getGraphic();
+        ScaleTransition scaleOut = new ScaleTransition(Duration.millis(500), imview);
+
+        scaleOut.setFromX(1.2);
+        scaleOut.setFromY(1.2);
+        scaleOut.setToX(1.0);
+        scaleOut.setToY(1.0);
+
+        // Reproducir la transición
+        scaleOut.play();
     }
 
     public static void desanimar_boton(Button button) {

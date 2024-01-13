@@ -5,6 +5,7 @@ ec\edu\espol\proyecto2p\FichaButton.class
 ec\edu\espol\proyecto2p\Animaciones.class
 module-info.class
 ec\edu\espol\proyecto2p\Jugador.class
+ec\edu\espol\proyecto2p\VistaMenuController.class
 ec\edu\espol\proyecto2p\VistaJuegoController.class
 ec\edu\espol\proyecto2p\Utilitaria.class
 ec\edu\espol\proyecto2p\App.class
