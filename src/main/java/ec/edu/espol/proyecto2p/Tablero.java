@@ -3,6 +3,8 @@ package ec.edu.espol.proyecto2p;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Pos;
@@ -144,7 +146,6 @@ public class Tablero{
                 HboxContainer.getChildren().add(position, fichaButton);
                 HboxContainer.requestLayout();
                 fichaButton.setStyle("-fx-background-color: black");
-                
                 tablero.add(position,fichaButton);
                 return true;
             }
@@ -228,7 +229,58 @@ public class Tablero{
         }
             
      }
- 
+     
+    public void jugarFichaMaquina(Jugador maquina, Pane JPane, Jugador jugadorSiguiente) {
+        Ficha fichaJugable = maquina.getFichaJugable(this);
+
+        if (fichaJugable != null) {
+            FichaButton fichaButton = new FichaButton(fichaJugable, null);
+            maquina.jugarFicha(this, JPane, fichaButton, jugadorSiguiente);
+        } else {
+            // Si no hay fichas jugables, juega cualquier ficha excepto la comodín
+            List<Ficha> fichasNoComodin = maquina.getMano().stream()
+                    .filter(ficha -> !(ficha instanceof FichaComodin))
+                    .collect(Collectors.toList());
+
+            if (!fichasNoComodin.isEmpty()) {
+                Ficha fichaRandom = fichasNoComodin.get(new Random().nextInt(fichasNoComodin.size()));
+                FichaButton fichaButton = new FichaButton(fichaRandom, null);
+                maquina.jugarFicha(this, JPane, fichaButton, jugadorSiguiente);
+            } else {
+                // La máquina no tiene fichas jugables y solo le queda la comodín
+                // Puedes manejar esto de acuerdo a tus reglas de juego
+            }
+        }
+    }
+     
+     public void addTurnoMaquinaListener(Jugador maquina, Pane JPane, HBox HboxContainer, Label lblQuienJuega) {
+        boolean esSuTurno = turnoDeJugador.equals(maquina);
+        int indiceMaquina = this.getJugadores().indexOf(maquina);
+        int indiceJugadorSiguiente = (indiceMaquina + 1) % this.getJugadores().size();
+        Jugador jugadorSiguiente = this.getJugadores().get(indiceJugadorSiguiente);
+        //ArrayList<Ficha> mano = (ArrayList<Ficha>) jugador.getMano();
+        turnoDeJugadorProperty.addListener((obs, oldTurno, newTurno) -> {
+            if (newTurno.equals(maquina)){
+                if(!maquina.tieneFichasValidas(this)){
+                    if ((maquina.getMano().get(maquina.getMano().size()-1) instanceof FichaComodin)) {
+                        FichaButton fichaButton = (FichaButton) JPane.getChildren().get(maquina.getMano().size()-1);//Ficha comodin
+                        maquina.getMano().get(maquina.getMano().size()-1).setLado1(Utilitaria.numeroEntreCeroYSeis());
+                        maquina.jugarFicha(this, JPane, fichaButton,jugadorSiguiente);
+                    }else{
+                        new Alert(AlertType.WARNING, "¡" + maquina.getNombre() + " ha perdido!").showAndWait();
+                        System.exit(0); // Cerrar la aplicación
+                    }
+                }else{
+                
+                }
+                updateTurnoLabel(lblQuienJuega, jugadorSiguiente);
+            }
+        });
+        if (esSuTurno) {
+            this.setTurnoDeJugador(maquina);
+        }
+    }
+    
     public void updateTurnoLabel(Label lblQuienJuega, Jugador nuevoTurno) { //Esta wea no funciona y no se por q
         lblQuienJuega.setText("Turno del jugador: " + nuevoTurno.getNombre());
         lblQuienJuega.setFont(new Font("Arial", 24));
@@ -273,4 +325,6 @@ public class Tablero{
             System.exit(0); // Otra opción podría ser cerrar la aplicación de manera más controlada
         }
     }
+    
+    
 }

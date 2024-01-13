@@ -63,6 +63,47 @@ public class VistaMenuController implements Initializable {
     }
     
     @FXML
+    private void abrirVistaJuego1vsIA(MouseEvent event){
+        try {
+            // Crear un cuadro de diálogo personalizado con un GridPane
+            TextInputDialog dialog = new TextInputDialog();
+            dialog.setTitle("Nombre de Jugador");
+            dialog.setHeaderText(null);
+
+            // Crear un GridPane y configurar los campos de texto
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            TextField nombreJugador1 = new TextField();
+            grid.add(new Label("Jugador 1:"), 0, 0);
+            grid.add(nombreJugador1, 1, 0);
+            dialog.getDialogPane().setContent(grid);
+            // Mostrar el cuadro de diálogo y obtener los nombres de los jugadores
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                String j1 = nombreJugador1.getText();
+
+                // Cargar el FXML y establecer los nombres de los jugadores
+                FXMLLoader fml = App.loadFXML("VistaJuego");
+                Scene s = new Scene(fml.load(), 1100, 480);
+                VistaJuegoController cc = fml.getController();
+                cc.setNombreJugador(j1);
+
+                // Configurar y mostrar la ventana
+                Stage st = new Stage();
+                st.setScene(s);
+                st.show();
+
+                // Cerrar la ventana actual
+                Button b = (Button) event.getSource();
+                Stage curr = (Stage) b.getScene().getWindow();
+                curr.close();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+    @FXML
     private void abrirVistaJuego1vs1(MouseEvent event){
         try {
             // Crear un cuadro de diálogo personalizado con un GridPane
@@ -90,7 +131,7 @@ public class VistaMenuController implements Initializable {
 
                 // Cargar el FXML y establecer los nombres de los jugadores
                 FXMLLoader fml = App.loadFXML("VistaJuego");
-                Scene s = new Scene(fml.load(), 1000, 480);
+                Scene s = new Scene(fml.load(), 1100, 480);
                 VistaJuegoController cc = fml.getController();
                 cc.setNombresJugadores(j1, j2);
 
@@ -108,27 +149,5 @@ public class VistaMenuController implements Initializable {
             ex.printStackTrace();
         }
     }
-
-    
-    
-//        private void abrirVistaJuego1vsIA(MouseEvent event) {
-//            try {
-//                FXMLLoader fml = App.loadFXML("VistaJuego");
-//                VistaJuegoController cc = fml.getController();
-//                cc.setNombresJugadores("Jugador 1", "Machine");
-//
-//                Scene s = new Scene(fml.load(), 900, 480);
-//                Stage st = new Stage();
-//                st.setScene(s);
-//                st.show();
-//
-//                Button b = (Button) event.getSource();
-//                Stage curr = (Stage) b.getScene().getWindow();
-//                curr.close();
-//            } catch (IOException ex) {
-//                Alert a = new Alert(Alert.AlertType.ERROR, "No se pudo abrir el archivo fxml");
-//                a.show();
-//            }
-//        }
     
 }

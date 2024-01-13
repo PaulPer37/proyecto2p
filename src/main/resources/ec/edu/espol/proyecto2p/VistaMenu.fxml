@@ -38,7 +38,7 @@
                   <Blend />
                </effect>
             </Button>
-            <Button fx:id="btn1vsIA" alignment="CENTER" blendMode="DARKEN" contentDisplay="CENTER" mnemonicParsing="false" onMouseEntered="#animarBotonJuego" prefHeight="38.0" prefWidth="108.0" style="-fx-background-color: transparent;" textAlignment="CENTER">
+            <Button fx:id="btn1vsIA" alignment="CENTER" blendMode="DARKEN" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#abrirVistaJuego1vsIA" onMouseEntered="#animarBotonJuego" prefHeight="38.0" prefWidth="108.0" style="-fx-background-color: transparent;" textAlignment="CENTER">
                <font>
                   <Font name="Lucida Fax Regular" size="12.0" />
                </font>

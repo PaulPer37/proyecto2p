@@ -67,16 +67,41 @@ public class Jugador{
             tablero.setTurnoDeJugador(this);
         }
     }
+    public boolean tieneFichaEnMano() {
+        return !this.getMano().isEmpty();
+    }
     public boolean tieneFichasValidas(Tablero tablero) {
         for (Ficha ficha : mano) {
-            FichaButton fichaButton = new FichaButton(ficha, new Image("img/" + ficha.getFile()));
-            if(ficha instanceof FichaComodin){
+            if (ficha instanceof FichaComodin) {
                 return true;
             }
+            FichaButton fichaButton = new FichaButton(ficha, null);
             if (tablero.isLegalMove(fichaButton)) {
                 return true;
             }
         }
         return false;
     }
+
+    public Ficha getFichaJugable(Tablero tablero) {
+        int checkLeft;
+        int checkRight;
+        try {
+            checkLeft = tablero.getLeftMostNum();
+            checkRight = tablero.getRightMostNum();
+        } catch (Exception e) {
+            checkLeft = -1;
+            checkRight = -1;
+        }
+
+        for (Ficha ficha : this.mano) {
+            int leftSide = ficha.getLado1();
+            int rightSide = ficha.getLado2();
+            if (leftSide == checkRight || rightSide == checkLeft) {
+                return ficha;
+            }
+        }
+        return null;
+    }
+
 }

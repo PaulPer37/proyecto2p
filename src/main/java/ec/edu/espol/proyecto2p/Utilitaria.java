@@ -30,7 +30,7 @@ public class Utilitaria {
         return mano;
     }
 
-    private static boolean yaExisteFichaEnMano(int lado1, int lado2) {
+    public static boolean yaExisteFichaEnMano(int lado1, int lado2) {
         for (Ficha ficha : fichasCreadas) {
             if (ficha.getLado1() == lado1 && ficha.getLado2() == lado2) {
                 return true; // La ficha ya existe en las manos
@@ -38,4 +38,13 @@ public class Utilitaria {
         }
         return false; // La ficha no existe en las manos
     }
+    public static int numeroEntreCeroYSeis(){
+        Random random = new Random();
+        int n=0;
+        while (n<=0 || n>6){
+            n = random.nextInt(6) + 1;
+        }
+        return n;
+    }
+    
 }

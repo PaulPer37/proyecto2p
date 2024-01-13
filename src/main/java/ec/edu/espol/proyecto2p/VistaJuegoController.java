@@ -18,6 +18,11 @@ public class VistaJuegoController implements Initializable {
         super();
         jugar1v1(j1, j2);
     }
+    
+    public VistaJuegoController(String j1){
+        super();
+        jugar1vsIA(j1);
+    }
     private String nombreJugador1;
     private String nombreJugador2;
 
@@ -39,9 +44,7 @@ public class VistaJuegoController implements Initializable {
     private Label lblJugador2;
     @Override
     public void initialize(URL url, ResourceBundle rb){
-        if (nombreJugador1 != null && nombreJugador2 != null) {
-            jugar1v1(nombreJugador1, nombreJugador2);
-        }
+        //xD
     }
 
     public void jugar1v1(String name1,String name2){
@@ -50,8 +53,8 @@ public class VistaJuegoController implements Initializable {
         Jugador j2 = new Jugador(name2, (ArrayList<Ficha>) Utilitaria.crearManoJugador());
         j1.cargarFichasJugador(J1Panel);
         j2.cargarFichasJugador(J2Panel);
-        lblJugador1.setText("Jugador: "+j1.getNombre());
-        lblJugador2.setText("Jugador: "+j2.getNombre());
+        lblJugador1.setText(j1.getNombre());
+        lblJugador2.setText(j2.getNombre());
         Tablero tablero = new Tablero(j1,j2, TableroPanel,HboxContainer);
         tablero.tableroDisplaysOn(MainPanel,TableroPanel);
         tablero.addTurnoListener(j1, J1Panel, HboxContainer, lblQuienJuega);
@@ -67,15 +70,17 @@ public class VistaJuegoController implements Initializable {
         });
     }
     
-    public void jugar1vsIA(){
-        Jugador j1 = new Jugador("Jugador1", (ArrayList<Ficha>) Utilitaria.crearManoJugador());
+    public void jugar1vsIA(String name1){
+        Jugador j1 = new Jugador(name1, (ArrayList<Ficha>) Utilitaria.crearManoJugador());
         Jugador j2 = new Jugador("Computadora", (ArrayList<Ficha>) Utilitaria.crearManoJugador());
         j1.cargarFichasJugador(J1Panel);
         j2.cargarFichasJugador(J2Panel);
+        lblJugador1.setText(j1.getNombre());
+        lblJugador2.setText(j2.getNombre());
         Tablero tablero = new Tablero(j1,j2, TableroPanel,HboxContainer);
         tablero.tableroDisplaysOn(MainPanel,TableroPanel);
         tablero.addTurnoListener(j1, J1Panel, HboxContainer, lblQuienJuega);
-        //Falta el turno de la maquina
+        tablero.addTurnoMaquinaListener(j2, J2Panel, HboxContainer, lblQuienJuega);
         HboxContainer.setOnMouseEntered((t) -> {
             ObservableList<Node> children = HboxContainer.getChildren();
             for (Node node : children) {
@@ -93,6 +98,14 @@ public class VistaJuegoController implements Initializable {
         // Si la interfaz de usuario ya está cargada, llamamos a jugar1v1 inmediatamente
         if (J1Panel != null && J2Panel != null && TableroPanel != null && HboxContainer != null) {
             jugar1v1(nombreJugador1, nombreJugador2);
+        }
+    }
+    public void setNombreJugador(String nombreJugador1) {
+        this.nombreJugador1 = nombreJugador1;
+
+        // Si la interfaz de usuario ya está cargada, llamamos a jugar1v1 inmediatamente
+        if (J1Panel != null && J2Panel != null && TableroPanel != null && HboxContainer != null) {
+            jugar1vsIA(nombreJugador1);
         }
     }
 }
