@@ -88,27 +88,29 @@ public class Tablero{
         if (tablero.isEmpty()){
             fichasEnJuego++;
             return true;
-        } else if(leftSide == -1){
+        } else if(leftSide == -1 || rightSide == -1){
             List<Object>lista = FichaButton.comodin();
             Image img = null;
             String lado = (String)lista.get(0);
-            
             int numero = (int)lista.get(1);
+            
             if(lado.equals("Izquierda")){
-                
                 fichaButton.getFichaReferenciada().setLado1(numero);
-                img = new Image("img/"+fichaButton.getFichaReferenciada().getLado1()+"-"+0+".jpg");
+                img = new Image("img/"+fichaButton.getFichaReferenciada().getLado1()+"-0.jpg");
         
             }else{
                 fichaButton.getFichaReferenciada().setLado2(numero);
-                
-                img = new Image("img/"+0+"-"+fichaButton.getFichaReferenciada().getLado2()+".jpg");
+                img = new Image("img/0-"+fichaButton.getFichaReferenciada().getLado2()+".jpg");
             }
-            
-            fichaButton = new FichaButton(fichaButton.getFichaReferenciada(),img);
             if (fichaButton.getFichaReferenciada() instanceof FichaComodin) {
-        fichaButton.setGraphic(new ImageView(img));
-    }
+                ImageView imageView = new ImageView(img);
+                imageView.setPreserveRatio(true);
+                imageView.setSmooth(true);
+                fichaButton.setStyle("-fx-border-color: transparent; -fx-background-color: lightgray;");
+                fichaButton.setGraphic(imageView);
+                fichaButton.resizeItself();
+                fichaButton.requestLayout();
+            }
             return true;
         }else {
             int checkLeft = this.getLeftMostNum();

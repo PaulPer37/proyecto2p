@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
@@ -92,6 +93,26 @@ public class FichaButton extends Button {
         });
     
     }
+    
+    public void resizeItself(){
+        int parentHeight=0;
+        int parentWidth=0;
+        double buttonWidth;
+        double buttonHeight;
+        if (this.getParent()!=null){
+            Parent parent = (Parent) this.getParent();
+            if (parent instanceof Pane){
+                System.out.println(parent.toString());
+                Pane thing = (Pane) parent;
+                buttonWidth = thing.getWidth() / thing.getChildren().size() * 2.9;
+                buttonHeight = thing.getHeight();
+                ImageView imageView = (ImageView) this.getGraphic();
+                imageView.setFitWidth(buttonWidth);
+                imageView.setFitHeight(buttonHeight);
+            }
+        }
+    }
+    
     public static List<Object> comodin() {
         // Opciones para la dirección
         List<String> choices = Arrays.asList("Izquierda", "Derecha");
@@ -144,12 +165,6 @@ public class FichaButton extends Button {
             alert.setContentText("Dirección seleccionada: " + direction + "\nNúmero ingresado: " + number);
             alert.showAndWait();
         }
-        
-        
         return lista;
-}
-    public void cambiarImagen(Image nuevaImagen) {
-    ImageView imageView = (ImageView) this.getGraphic();
-    imageView.setImage(nuevaImagen);
-}
+    }
 }
