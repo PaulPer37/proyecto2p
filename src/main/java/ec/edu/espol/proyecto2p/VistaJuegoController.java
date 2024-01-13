@@ -11,6 +11,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 public class VistaJuegoController implements Initializable {
+    public VistaJuegoController(){
+        super();
+    }
+    public VistaJuegoController(String j1,String j2){
+        super();
+        jugar1v1(j1, j2);
+    }
+    private String nombreJugador1;
+    private String nombreJugador2;
 
     @FXML
     public Pane J1Panel;
@@ -24,17 +33,25 @@ public class VistaJuegoController implements Initializable {
     private Label lblQuienJuega;
     @FXML
     private HBox HboxContainer;
+    @FXML
+    private Label lblJugador1;
+    @FXML
+    private Label lblJugador2;
     @Override
     public void initialize(URL url, ResourceBundle rb){
-        jugar1v1();
+        if (nombreJugador1 != null && nombreJugador2 != null) {
+            jugar1v1(nombreJugador1, nombreJugador2);
+        }
     }
 
-    public void jugar1v1(){
+    public void jugar1v1(String name1,String name2){
         //Asumiendo que estoy ya jugando contra una persona en la VistaJuego
-        Jugador j1 = new Jugador("Jugador1", (ArrayList<Ficha>) Utilitaria.crearManoJugador());
-        Jugador j2 = new Jugador("Jugador2", (ArrayList<Ficha>) Utilitaria.crearManoJugador());
+        Jugador j1 = new Jugador(name1, (ArrayList<Ficha>) Utilitaria.crearManoJugador());
+        Jugador j2 = new Jugador(name2, (ArrayList<Ficha>) Utilitaria.crearManoJugador());
         j1.cargarFichasJugador(J1Panel);
         j2.cargarFichasJugador(J2Panel);
+        lblJugador1.setText("Jugador: "+j1.getNombre());
+        lblJugador2.setText("Jugador: "+j2.getNombre());
         Tablero tablero = new Tablero(j1,j2, TableroPanel,HboxContainer);
         tablero.tableroDisplaysOn(MainPanel,TableroPanel);
         tablero.addTurnoListener(j1, J1Panel, HboxContainer, lblQuienJuega);
@@ -68,5 +85,14 @@ public class VistaJuegoController implements Initializable {
                 }
             }
         });
+    }
+    public void setNombresJugadores(String nombreJugador1, String nombreJugador2) {
+        this.nombreJugador1 = nombreJugador1;
+        this.nombreJugador2 = nombreJugador2;
+
+        // Si la interfaz de usuario ya está cargada, llamamos a jugar1v1 inmediatamente
+        if (J1Panel != null && J2Panel != null && TableroPanel != null && HboxContainer != null) {
+            jugar1v1(nombreJugador1, nombreJugador2);
+        }
     }
 }

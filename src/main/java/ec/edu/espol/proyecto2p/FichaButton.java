@@ -102,7 +102,7 @@ public class FichaButton extends Button {
             if (parent instanceof Pane){
                 System.out.println(parent.toString());
                 Pane thing = (Pane) parent;
-                buttonWidth = thing.getWidth() / thing.getChildren().size() * 2.9;
+                buttonWidth = thing.getWidth() / 6 * 2.9;
                 buttonHeight = thing.getHeight();
                 ImageView imageView = (ImageView) this.getGraphic();
                 imageView.setFitWidth(buttonWidth);
