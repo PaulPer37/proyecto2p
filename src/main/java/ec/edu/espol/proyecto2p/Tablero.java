@@ -146,11 +146,39 @@ public class Tablero{
                 HboxContainer.getChildren().add(position, fichaButton);
                 HboxContainer.requestLayout();
                 fichaButton.setStyle("-fx-background-color: black");
+                
                 tablero.add(position,fichaButton);
                 return true;
             }
+        }else if(fichaButton.getFichaReferenciada().getLado2()==-1||fichaButton.getFichaReferenciada().getLado1()==-1){
+             if (fichaButton.getFichaReferenciada().getLado2()==-1){
+                 if (!HboxContainer.getChildren().contains(fichaButton)) {
+                    HboxContainer.getChildren().add(position, fichaButton);
+                    HboxContainer.requestLayout();
+                    fichaButton.setStyle("-fx-background-color: black");
+                    tablero.add(position,fichaButton);
+                    if (jugador.getMano().isEmpty()) {
+                        new Alert(AlertType.INFORMATION, "¡" + jugador.getNombre() + " ha ganado!").showAndWait();
+                        System.exit(0); // Cerrar la aplicación
+                    }
+                    return true;
+                }
+             }else{
+                 position = this.getTableroSize();
+                if (!HboxContainer.getChildren().contains(fichaButton)) {
+                    HboxContainer.getChildren().add(position, fichaButton);
+                    HboxContainer.requestLayout();
+                    fichaButton.setStyle("-fx-background-color: black");
+                    tablero.add(position,fichaButton);
+                    if (jugador.getMano().isEmpty()) {
+                        new Alert(AlertType.INFORMATION, "¡" + jugador.getNombre() + " ha ganado!").showAndWait();
+                        System.exit(0); // Cerrar la aplicación
+                    }
+                    return true;
+                }
+             }
         }else{
-            if (fichaButton.getFichaReferenciada().getLado2()==this.getLeftMostNum()||fichaButton.getFichaReferenciada().getLado2()==-1) {
+            if (fichaButton.getFichaReferenciada().getLado2()==this.getLeftMostNum()) {
                 if (!HboxContainer.getChildren().contains(fichaButton)) {
                     HboxContainer.getChildren().add(position, fichaButton);
                     HboxContainer.requestLayout();
@@ -163,7 +191,7 @@ public class Tablero{
                     return true;
                 }
             }
-            if (fichaButton.getFichaReferenciada().getLado1()==this.getRightMostNum()||fichaButton.getFichaReferenciada().getLado1()==-1){
+            if (fichaButton.getFichaReferenciada().getLado1()==this.getRightMostNum()){
                 position = this.getTableroSize();
                 if (!HboxContainer.getChildren().contains(fichaButton)) {
                     HboxContainer.getChildren().add(position, fichaButton);
@@ -180,6 +208,7 @@ public class Tablero{
         }
         return false;
     }
+    
     
      public void addTurnoListener(Jugador jugador, Pane JPane, HBox HboxContainer, Label lblQuienJuega) {
         boolean esSuTurno = turnoDeJugador.equals(jugador);
