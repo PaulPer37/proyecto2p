@@ -108,17 +108,11 @@ public class VistaJuegoController implements Initializable {
         
         
         HboxContainer.getChildren().addListener((ListChangeListener<Node>) change -> {
-            final double buttonWidth = 90;
-            final double buttonHeight =45.0;
+
             for (Node node : HboxContainer.getChildren()) {
                 
                 if (node instanceof FichaButton) {
                     FichaButton fichaButton = (FichaButton) node;
-                    if (fichaButton.getWidth()>90 || fichaButton.getHeight()>45.0) {
-                        ImageView imageView = (ImageView) fichaButton.getGraphic();
-                        imageView.setFitWidth(buttonWidth);
-                        imageView.setFitHeight(buttonHeight);
-                    }
                     fichaButton.resizeItself();
                 }
             }
