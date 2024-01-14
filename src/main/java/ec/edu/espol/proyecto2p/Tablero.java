@@ -3,8 +3,6 @@ package ec.edu.espol.proyecto2p;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Pos;
@@ -259,29 +257,38 @@ public class Tablero{
             
      }
      
-    public void jugarFichaMaquina(Jugador maquina, Pane JPane, Jugador jugadorSiguiente) {
-        Ficha fichaJugable = maquina.getFichaJugable(this);
-
-        if (fichaJugable != null) {
-            FichaButton fichaButton = new FichaButton(fichaJugable, null);
-            maquina.jugarFicha(this, JPane, fichaButton, jugadorSiguiente);
-        } else {
-            // Si no hay fichas jugables, juega cualquier ficha excepto la comodín
-            List<Ficha> fichasNoComodin = maquina.getMano().stream()
-                    .filter(ficha -> !(ficha instanceof FichaComodin))
-                    .collect(Collectors.toList());
-
-            if (!fichasNoComodin.isEmpty()) {
-                Ficha fichaRandom = fichasNoComodin.get(new Random().nextInt(fichasNoComodin.size()));
-                FichaButton fichaButton = new FichaButton(fichaRandom, null);
-                maquina.jugarFicha(this, JPane, fichaButton, jugadorSiguiente);
-            } else {
-                // La máquina no tiene fichas jugables y solo le queda la comodín
-                // Puedes manejar esto de acuerdo a tus reglas de juego
+    public void jugarFichaMaquina(Tablero tablero, Pane JPane, FichaButton fichaButton, Jugador jugadorSiguiente){
+        int leftSide = fichaButton.getFichaReferenciada().getLado1();
+        int rightSide = fichaButton.getFichaReferenciada().getLado2();
+        Random random = new Random();
+        int posibilidadDeLado;
+        //Quitarla de la mano de la maquina
+        jugadores.get(1).getMano().remove(fichaButton.getFichaReferenciada());
+        if(leftSide == -1 || rightSide == -1){
+            Image img = null;
+            posibilidadDeLado = random.nextInt(2);
+            int numero = Utilitaria.numeroEntreCeroYSeis();
+            if(posibilidadDeLado==0){
+                fichaButton.getFichaReferenciada().setLado1(numero);
+                img = new Image("img/"+numero+"-0.jpg");
+            }else{
+                fichaButton.getFichaReferenciada().setLado2(numero);
+                img = new Image("img/0-"+numero+".jpg");
             }
+            ImageView imageView = new ImageView(img);
+            imageView.setPreserveRatio(true);
+            imageView.setSmooth(true);
+            fichaButton.setStyle("-fx-border-color: transparent; -fx-background-color: lightgray;");
+            fichaButton.setGraphic(imageView);
+            fichaButton.resizeItself();
+            fichaButton.requestLayout();
+            this.moverFichaButton(JPane, fichaButton, jugadores.get(1));//Mover desde el Pane de la maquina hasta el Tablero
+            tablero.setTurnoDeJugador(jugadorSiguiente);
+        }else{
+            this.moverFichaButton(JPane, fichaButton, jugadores.get(1));//Mover desde el Pane de la maquina hasta el Tablero
+            tablero.setTurnoDeJugador(jugadorSiguiente);
         }
     }
-     
      public void addTurnoMaquinaListener(Jugador maquina, Pane JPane, HBox HboxContainer, Label lblQuienJuega) {
         boolean esSuTurno = turnoDeJugador.equals(maquina);
         int indiceMaquina = this.getJugadores().indexOf(maquina);
@@ -292,15 +299,15 @@ public class Tablero{
             if (newTurno.equals(maquina)){
                 if(!maquina.tieneFichasValidas(this)){
                     if ((maquina.getMano().get(maquina.getMano().size()-1) instanceof FichaComodin)) {
-                        FichaButton fichaButton = (FichaButton) JPane.getChildren().get(maquina.getMano().size()-1);//Ficha comodin
-                        maquina.getMano().get(maquina.getMano().size()-1).setLado1(Utilitaria.numeroEntreCeroYSeis());
-                        maquina.jugarFicha(this, JPane, fichaButton,jugadorSiguiente);
+                        FichaButton fichaButton = (FichaButton) JPane.getChildren().get(JPane.getChildren().size()-1);
+                        this.jugarFichaMaquina(this, JPane, fichaButton,jugadorSiguiente);//juega la ficha comodin
                     }else{
                         new Alert(AlertType.WARNING, "¡" + maquina.getNombre() + " ha perdido!").showAndWait();
                         System.exit(0); // Cerrar la aplicación
                     }
                 }else{
-                
+                    
+                    this.jugarFichaMaquina(this, JPane, this.getFichaJugable(JPane), jugadorSiguiente);
                 }
                 updateTurnoLabel(lblQuienJuega, jugadorSiguiente);
             }
@@ -309,7 +316,36 @@ public class Tablero{
             this.setTurnoDeJugador(maquina);
         }
     }
-    
+     
+    public FichaButton getFichaJugable(Pane JPane) {
+        int checkLeft;
+        int checkRight;
+        ArrayList<FichaButton> posiblesFichasAJugar = new ArrayList<>();
+        Random random = new Random();
+        int indiceRandom = random.nextInt(6);
+        if (this.tablero.isEmpty()){
+            VBox vbox = (VBox) JPane.getChildren().get(1);
+            return (FichaButton) vbox.getChildren().get(indiceRandom);
+        }else{
+            checkLeft=this.getLeftMostNum();
+            checkRight=this.getRightMostNum();
+            JPane.getChildren().stream()
+                .filter(node -> node instanceof VBox)
+                .map(node -> (VBox) node)
+                .flatMap(vbox -> vbox.getChildren().stream())
+                .filter(posibleButtons -> posibleButtons instanceof FichaButton)
+                .map(posibleButtons -> (FichaButton) posibleButtons)
+                .filter(fichaButton -> fichaButton.getFichaReferenciada() != null)
+                .forEach((fichaButton) -> {
+                    if (fichaButton.getFichaReferenciada().getLado2()==checkLeft || fichaButton.getFichaReferenciada().getLado1()==checkRight) {
+                        posiblesFichasAJugar.add(fichaButton);
+                    }
+                });
+            indiceRandom = random.nextInt(posiblesFichasAJugar.size());
+            return posiblesFichasAJugar.get(indiceRandom);
+        }
+    }
+     
     public void updateTurnoLabel(Label lblQuienJuega, Jugador nuevoTurno) { //Esta wea no funciona y no se por q
         lblQuienJuega.setText("Turno del jugador: " + nuevoTurno.getNombre());
         lblQuienJuega.setFont(new Font("Arial", 24));

@@ -83,25 +83,5 @@ public class Jugador{
         return false;
     }
 
-    public Ficha getFichaJugable(Tablero tablero) {
-        int checkLeft;
-        int checkRight;
-        try {
-            checkLeft = tablero.getLeftMostNum();
-            checkRight = tablero.getRightMostNum();
-        } catch (Exception e) {
-            checkLeft = -1;
-            checkRight = -1;
-        }
-
-        for (Ficha ficha : this.mano) {
-            int leftSide = ficha.getLado1();
-            int rightSide = ficha.getLado2();
-            if (leftSide == checkRight || rightSide == checkLeft) {
-                return ficha;
-            }
-        }
-        return null;
-    }
 
 }

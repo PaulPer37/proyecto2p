@@ -71,8 +71,8 @@ public abstract class Animaciones {
      TranslateTransition transition = new TranslateTransition(duration, fichaButton);
 
      // Establecer la posición final en el destino
-     transition.setInterpolator(Interpolator.EASE_BOTH);
-     fichaButton.setStyle("-fx-background-color: black");
+//     transition.setInterpolator(Interpolator.EASE_BOTH);
+//     fichaButton.setStyle("-fx-background-color: black");
 
      // Configurar cualquier otra opción de la transición si es necesario
      transition.setCycleCount(1);
