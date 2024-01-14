@@ -42,25 +42,6 @@ public class VistaMenuController implements Initializable {
         animarBoton(event);
     }
     
-    private void regresar(MouseEvent event) {
-        FXMLLoader fml;
-        try {
-            fml = App.loadFXML("VistaMenu");
-            Scene s = new Scene(fml.load(),600,600);
-            VistaJuegoController cc = fml.getController();
-            Stage st = new Stage();
-            st.setScene(s);
-            st.show();
-            
-            Button b = (Button)event.getSource();
-            Stage curr = (Stage)b.getScene().getWindow();
-            curr.close();
-        } catch (IOException ex) {
-            Alert a = new Alert(Alert.AlertType.ERROR,"No se pudo abrir el archivo fxml");
-                a.show();
-        }
-    }
-    
     @FXML
     private void abrirVistaJuego1vsIA(MouseEvent event){
         try {
@@ -81,7 +62,9 @@ public class VistaMenuController implements Initializable {
             Optional<String> result = dialog.showAndWait();
             if (result.isPresent()) {
                 String j1 = nombreJugador1.getText();
-
+                if (j1.equals("")) {
+                    j1 = "Jugador 1";
+                }
                 // Cargar el FXML y establecer los nombres de los jugadores
                 FXMLLoader fml = App.loadFXML("VistaJuego");
                 Scene s = new Scene(fml.load(), 1100, 480);
@@ -127,7 +110,12 @@ public class VistaMenuController implements Initializable {
             if (result.isPresent()) {
                 String j1 = nombreJugador1.getText();
                 String j2 = nombreJugador2.getText();
-
+                if (j1.equals("")) {
+                    j1 = "Jugador 1";
+                }
+                if (j2.equals("")) {
+                    j2 = "Jugador 2";
+                }
                 // Cargar el FXML y establecer los nombres de los jugadores
                 FXMLLoader fml = App.loadFXML("VistaJuego");
                 Scene s = new Scene(fml.load(), 1100, 480);

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -144,7 +145,6 @@ public class Tablero{
                 HboxContainer.getChildren().add(position, fichaButton);
                 HboxContainer.requestLayout();
                 fichaButton.setStyle("-fx-background-color: black");
-                
                 tablero.add(position,fichaButton);
                 return true;
             }
@@ -215,45 +215,46 @@ public class Tablero{
         Jugador jugadorSiguiente = this.getJugadores().get(indiceJugadorSiguiente);
         
         turnoDeJugadorProperty.addListener((obs, oldTurno, newTurno) -> {
-        if (newTurno.equals(jugador)) {
-            if (!jugador.tieneFichasValidas(this)) {
-                new Alert(AlertType.WARNING, "¡" + jugador.getNombre() + " ha perdido!").showAndWait();
-                System.exit(0); // Cerrar la aplicación
-            }//Si es el turno de este jugador, animar los botones y que pueda mover sus fichas
-            JPane.getChildren().stream()
-                .filter(node -> node instanceof VBox)
-                .map(node -> (VBox) node)
-                .flatMap(vbox -> vbox.getChildren().stream())
-                .filter(posibleButtons -> posibleButtons instanceof FichaButton)
-                .map(posibleButtons -> (FichaButton) posibleButtons)
-                .filter(fichaButton -> fichaButton.getFichaReferenciada() != null)
-                .forEach(fichaButton -> {
-                    Animaciones.animar_boton(fichaButton);
-                    fichaButton.setOnMouseClicked(event -> {
-                        jugador.jugarFicha(this, JPane, fichaButton,jugadorSiguiente);
-                        updateTurnoLabel(lblQuienJuega, jugadorSiguiente);
-                        Animaciones.desanimar_boton(fichaButton);
+            lblQuienJuega.setText("Turno del jugador: " + turnoDeJugador.getNombre());
+            if (newTurno.equals(jugador)) {
+                if (!jugador.tieneFichasValidas(this)) {
+                    new Alert(AlertType.WARNING, "¡" + jugador.getNombre() + " ha perdido!").showAndWait();
+                    System.exit(0); // Cerrar la aplicación
+                }//Si es el turno de este jugador, animar los botones y que pueda mover sus fichas
+                JPane.getChildren().stream()
+                    .filter(node -> node instanceof VBox)
+                    .map(node -> (VBox) node)
+                    .flatMap(vbox -> vbox.getChildren().stream())
+                    .filter(posibleButtons -> posibleButtons instanceof FichaButton)
+                    .map(posibleButtons -> (FichaButton) posibleButtons)
+                    .filter(fichaButton -> fichaButton.getFichaReferenciada() != null)
+                    .forEach(fichaButton -> {
+                        Animaciones.animar_boton(fichaButton);
+                        fichaButton.setOnMouseClicked(event -> {
+                            jugador.jugarFicha(this, JPane, fichaButton,jugadorSiguiente);
+                            Animaciones.desanimar_boton(fichaButton);
+                        });
                     });
-                });
-        } else {
-            // Si no es el turno de este jugador, desanimar los botones y que pueda mover sus fichas
-            JPane.getChildren().stream()
-                .filter(node -> node instanceof VBox)
-                .map(node -> (VBox) node)
-                .flatMap(vbox -> vbox.getChildren().stream())
-                .filter(posibleButtons -> posibleButtons instanceof FichaButton)
-                .map(posibleButtons -> (FichaButton) posibleButtons)
-                .filter(fichaButton -> fichaButton.getFichaReferenciada() != null)
-                .forEach((fichaButton) -> {
-                    Animaciones.desanimar_boton(fichaButton);
-                    fichaButton.setOnMouseClicked(null);
-                });
-            }
-        });
+            } else {
+                // Si no es el turno de este jugador, desanimar los botones y que pueda mover sus fichas
+                JPane.getChildren().stream()
+                    .filter(node -> node instanceof VBox)
+                    .map(node -> (VBox) node)
+                    .flatMap(vbox -> vbox.getChildren().stream())
+                    .filter(posibleButtons -> posibleButtons instanceof FichaButton)
+                    .map(posibleButtons -> (FichaButton) posibleButtons)
+                    .filter(fichaButton -> fichaButton.getFichaReferenciada() != null)
+                    .forEach((fichaButton) -> {
+                        Animaciones.desanimar_boton(fichaButton);
+                        fichaButton.setOnMouseClicked(null);
+                    });
+                }
+            });
         
         if (esSuTurno) {
             this.setTurnoDeJugador(jugador);
         }
+         
             
      }
      
@@ -262,6 +263,17 @@ public class Tablero{
         int rightSide = fichaButton.getFichaReferenciada().getLado2();
         Random random = new Random();
         int posibilidadDeLado;
+        System.out.println(fichaButton.getHeight());
+        System.out.println(fichaButton.getWidth());
+        final double buttonWidth = 90;
+        final double buttonHeight =45.0;
+        if (fichaButton.getWidth()==0 || fichaButton.getHeight()==0) {
+            ImageView imageView = (ImageView) fichaButton.getGraphic();
+            imageView.setFitWidth(buttonWidth);
+            imageView.setFitHeight(buttonHeight);
+        }
+        fichaButton.setPrefWidth(90);
+        fichaButton.setPrefHeight(45);
         //Quitarla de la mano de la maquina
         jugadores.get(1).getMano().remove(fichaButton.getFichaReferenciada());
         if(leftSide == -1 || rightSide == -1){
@@ -289,27 +301,33 @@ public class Tablero{
             tablero.setTurnoDeJugador(jugadorSiguiente);
         }
     }
+    
      public void addTurnoMaquinaListener(Jugador maquina, Pane JPane, HBox HboxContainer, Label lblQuienJuega) {
         boolean esSuTurno = turnoDeJugador.equals(maquina);
         int indiceMaquina = this.getJugadores().indexOf(maquina);
         int indiceJugadorSiguiente = (indiceMaquina + 1) % this.getJugadores().size();
         Jugador jugadorSiguiente = this.getJugadores().get(indiceJugadorSiguiente);
-        //ArrayList<Ficha> mano = (ArrayList<Ficha>) jugador.getMano();
-        turnoDeJugadorProperty.addListener((obs, oldTurno, newTurno) -> {
+        VBox vbox = (VBox) JPane.getChildren().get(1);
+        turnoDeJugadorProperty.addListener((var obs, var oldTurno, var newTurno) -> {
             if (newTurno.equals(maquina)){
                 if(!maquina.tieneFichasValidas(this)){
-                    if ((maquina.getMano().get(maquina.getMano().size()-1) instanceof FichaComodin)) {
-                        FichaButton fichaButton = (FichaButton) JPane.getChildren().get(JPane.getChildren().size()-1);
-                        this.jugarFichaMaquina(this, JPane, fichaButton,jugadorSiguiente);//juega la ficha comodin
+                    FichaButton fichaComodinButton = (FichaButton) vbox.getChildren().get(vbox.getChildren().size()-1);
+                    boolean tieneFichaComodin = fichaComodinButton.getFichaReferenciada() instanceof FichaComodin;
+                    if (tieneFichaComodin) {
+                        this.jugarFichaMaquina(this, JPane, fichaComodinButton,jugadorSiguiente);//juega la ficha comodin
                     }else{
                         new Alert(AlertType.WARNING, "¡" + maquina.getNombre() + " ha perdido!").showAndWait();
                         System.exit(0); // Cerrar la aplicación
                     }
                 }else{
-                    
-                    this.jugarFichaMaquina(this, JPane, this.getFichaJugable(JPane), jugadorSiguiente);
+                    FichaButton fichaButton = this.getFichaJugable(JPane);
+                    if (fichaButton == null){
+                        new Alert(AlertType.WARNING, "¡" + maquina.getNombre() + " ha perdido!").showAndWait();
+                        System.exit(0); // Cerrar la aplicación
+                    }else{
+                        this.jugarFichaMaquina(this, JPane, this.getFichaJugable(JPane), jugadorSiguiente);
+                    }
                 }
-                updateTurnoLabel(lblQuienJuega, jugadorSiguiente);
             }
         });
         if (esSuTurno) {
@@ -341,18 +359,16 @@ public class Tablero{
                         posiblesFichasAJugar.add(fichaButton);
                     }
                 });
-            indiceRandom = random.nextInt(posiblesFichasAJugar.size());
+            if (posiblesFichasAJugar.isEmpty()) {
+                return null;
+            }else{
+                indiceRandom = random.nextInt(posiblesFichasAJugar.size());
+            }
+            System.out.println(indiceRandom);
             return posiblesFichasAJugar.get(indiceRandom);
         }
     }
      
-    public void updateTurnoLabel(Label lblQuienJuega, Jugador nuevoTurno) { //Esta wea no funciona y no se por q
-        lblQuienJuega.setText("Turno del jugador: " + nuevoTurno.getNombre());
-        lblQuienJuega.setFont(new Font("Arial", 24));
-        lblQuienJuega.setTextAlignment(TextAlignment.CENTER);
-        lblQuienJuega.setAlignment(Pos.CENTER);
-    }
-    
     public Jugador generarTurnoAleatorio(Jugador j1,Jugador j2){
         Random random = new Random();
         int r = random.nextInt(2);
@@ -366,15 +382,8 @@ public class Tablero{
     public void tableroDisplaysOn(Parent parent, Node node){
         if (node instanceof Pane){
             HboxContainer.setAlignment(Pos.CENTER);
-
             BorderPane bp = (BorderPane) parent;
-
             bp.setCenter(HboxContainer);
-            Label lblQuienJuega = new Label("Turno del jugador: "+this.turnoDeJugador.getNombre());
-            lblQuienJuega.setFont(new Font("Arial", 24));
-            lblQuienJuega.setTextAlignment(TextAlignment.CENTER);
-            lblQuienJuega.setAlignment(Pos.CENTER);
-            bp.setBottom(lblQuienJuega);
         }
     }
     public void checkJugadorSinFichas(Jugador jugador) {

@@ -18,13 +18,6 @@
    </right>
    <center>
       <BorderPane fx:id="TableroPanel" prefHeight="426.0" prefWidth="554.0" BorderPane.alignment="CENTER">
-         <bottom>
-            <Label fx:id="lblQuienJuega" alignment="CENTER" contentDisplay="CENTER" text="Turno del jugador: " textAlignment="CENTER" BorderPane.alignment="BOTTOM_CENTER">
-               <font>
-                  <Font name="Segoe UI Bold" size="21.0" />
-               </font>
-            </Label>
-         </bottom>
          <center>
             <HBox fx:id="HboxContainer" alignment="CENTER" style="-fx-background-color: white;" BorderPane.alignment="CENTER" />
          </center></BorderPane>
@@ -58,4 +51,10 @@
          </children>
       </GridPane>
    </top>
+   <bottom>
+      <Label fx:id="lblQuienJuega" alignment="CENTER" text="Label" textAlignment="CENTER" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Segoe UI" size="20.0" />
+         </font></Label>
+   </bottom>
 </BorderPane>

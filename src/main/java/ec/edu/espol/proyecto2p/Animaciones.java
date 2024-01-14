@@ -59,34 +59,24 @@ public abstract class Animaciones {
 
     // Método usado en Tablero
     public static void mover_ficha_button(FichaButton fichaButton, VBox origen, HBox destino, int position) {
-     // Agregar la FichaButton al HBox en la posición deseada
-     destino.getChildren().add(position, fichaButton);
+        Duration duration = new Duration(1000);
+        TranslateTransition transition = new TranslateTransition(duration, fichaButton);
+        // Configurar cualquier otra opción de la transición si es necesario
+        transition.setCycleCount(1);
 
-     // Obtener las coordenadas X e Y del HBox destino en relación con su contenedor padre (TableroPanel)
-     // Eliminar la FichaButton del HBox
-     destino.getChildren().remove(fichaButton);
+        // Ocultar la fichaButton antes de iniciar la transición
+        origen.getChildren().remove(fichaButton); // Remover de la lista original antes de iniciar la transición
+        fichaButton.setVisible(false); // Hacer invisible antes de iniciar la transición
 
-     // Crear una transición de posición desde las coordenadas obtenidas
-     Duration duration = new Duration(1000);
-     TranslateTransition transition = new TranslateTransition(duration, fichaButton);
+        // Manejar el evento de finalización de la transición
+        transition.setOnFinished(event -> {
+            // Lógica que deseas ejecutar después de mover la ficha al destino
+            fichaButton.setVisible(true); // Hacer visible después de completar la transición
+            destino.getChildren().add(position, fichaButton);
+        });
 
-     // Establecer la posición final en el destino
-//     transition.setInterpolator(Interpolator.EASE_BOTH);
-//     fichaButton.setStyle("-fx-background-color: black");
-
-     // Configurar cualquier otra opción de la transición si es necesario
-     transition.setCycleCount(1);
-
-     // Manejar el evento de finalización de la transición si es necesario
-     transition.setOnFinished(event -> {
-         // Lógica que deseas ejecutar después de mover la ficha al destino
-         fichaButton.setVisible(true);
-         destino.getChildren().add(position, fichaButton);
-     });
-
-     // Iniciar la transición
-     transition.play();
- }
-
+        // Iniciar la transición
+        transition.play();
+    }
 
 }

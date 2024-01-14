@@ -71,6 +71,9 @@ public class Jugador{
         return !this.getMano().isEmpty();
     }
     public boolean tieneFichasValidas(Tablero tablero) {
+        if (tablero.isEmpty()){
+            return true;
+        }
         for (Ficha ficha : mano) {
             if (ficha instanceof FichaComodin) {
                 return true;

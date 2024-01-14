@@ -58,7 +58,7 @@ public class FichaButton extends Button {
     public static void resizeButtons(Pane panel, VBox vBox) {
         double panelWidth = panel.getWidth();
         double panelHeight = panel.getHeight();
-        double buttonWidth = panelWidth / vBox.getChildren().size() * 2.9;
+        double buttonWidth = panelWidth / 6 * 2.9;
         double buttonHeight = panelHeight;
         // Ajustar el tamaño de cada botón
         vBox.getChildren().forEach(node -> {
@@ -88,7 +88,6 @@ public class FichaButton extends Button {
                 FichaButton fichaButton = (FichaButton) node;
                 fichaButton.setMinHeight(37);
                 fichaButton.setMinWidth(hBox.getWidth() / hBox.getChildren().size()+70.5);
-                
             }
         });
     
@@ -99,14 +98,31 @@ public class FichaButton extends Button {
         double buttonHeight;
         if (this.getParent()!=null){
             Parent parent = (Parent) this.getParent();
-            if (parent instanceof Pane){
-                System.out.println(parent.toString());
+            if (parent instanceof Pane && !(parent instanceof HBox)){
                 Pane thing = (Pane) parent;
-                buttonWidth = thing.getWidth() / 6 * 2.9;
+                buttonWidth = thing.getWidth();
                 buttonHeight = thing.getHeight();
                 ImageView imageView = (ImageView) this.getGraphic();
                 imageView.setFitWidth(buttonWidth);
                 imageView.setFitHeight(buttonHeight);
+            }
+            if (parent instanceof HBox) {
+                this.setPrefWidth(90);
+                this.setPrefHeight(45);
+                HBox thing = (HBox) parent;
+                if (thing.getChildren().size()>=9) {
+                    buttonWidth = 90 / (thing.getChildren().size()*1.5);
+                    buttonHeight = 45;
+                    ImageView imageView = (ImageView) this.getGraphic();
+                    imageView.setFitWidth(buttonWidth);
+                    imageView.setFitHeight(buttonHeight);
+                }else{
+                    buttonWidth = 90;
+                    buttonHeight = 45.0;
+                    ImageView imageView = (ImageView) this.getGraphic();
+                    imageView.setFitWidth(buttonWidth);
+                    imageView.setFitHeight(buttonHeight);
+                }
             }
         }
     }

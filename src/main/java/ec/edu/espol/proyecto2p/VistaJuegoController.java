@@ -2,14 +2,19 @@ package ec.edu.espol.proyecto2p;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 public class VistaJuegoController implements Initializable {
     public VistaJuegoController(){
         super();
@@ -44,7 +49,9 @@ public class VistaJuegoController implements Initializable {
     private Label lblJugador2;
     @Override
     public void initialize(URL url, ResourceBundle rb){
-        //xD
+        lblQuienJuega.setFont(new Font("Arial", 24));
+        lblQuienJuega.setTextAlignment(TextAlignment.CENTER);
+        lblQuienJuega.setAlignment(Pos.CENTER);
     }
 
     public void jugar1v1(String name1,String name2){
@@ -68,6 +75,14 @@ public class VistaJuegoController implements Initializable {
                 }
             }
         });
+        HboxContainer.getChildren().addListener((ListChangeListener<Node>) change -> {
+            for (Node node : HboxContainer.getChildren()) {
+                if (node instanceof FichaButton) {
+                    FichaButton fichaButton = (FichaButton) node;
+                    fichaButton.resizeItself();
+                }
+            }
+        });
     }
     
     public void jugar1vsIA(String name1){
@@ -87,6 +102,24 @@ public class VistaJuegoController implements Initializable {
                 if (node instanceof FichaButton) {
                     FichaButton fichaButton = (FichaButton) node;
                     fichaButton.setOnMouseClicked(null);
+                }
+            }
+        });
+        
+        
+        HboxContainer.getChildren().addListener((ListChangeListener<Node>) change -> {
+            final double buttonWidth = 90;
+            final double buttonHeight =45.0;
+            for (Node node : HboxContainer.getChildren()) {
+                
+                if (node instanceof FichaButton) {
+                    FichaButton fichaButton = (FichaButton) node;
+                    if (fichaButton.getWidth()>90 || fichaButton.getHeight()>45.0) {
+                        ImageView imageView = (ImageView) fichaButton.getGraphic();
+                        imageView.setFitWidth(buttonWidth);
+                        imageView.setFitHeight(buttonHeight);
+                    }
+                    fichaButton.resizeItself();
                 }
             }
         });
