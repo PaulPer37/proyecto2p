@@ -336,18 +336,20 @@ public class Tablero{
     }
      
     public FichaButton getFichaJugable(Pane JPane) {
-        int checkLeft;
-        int checkRight;
-        ArrayList<FichaButton> posiblesFichasAJugar = new ArrayList<>();
-        Random random = new Random();
-        int indiceRandom = random.nextInt(6);
-        if (this.tablero.isEmpty()){
-            VBox vbox = (VBox) JPane.getChildren().get(1);
-            return (FichaButton) vbox.getChildren().get(indiceRandom);
-        }else{
-            checkLeft=this.getLeftMostNum();
-            checkRight=this.getRightMostNum();
-            JPane.getChildren().stream()
+    int checkLeft;
+    int checkRight;
+    ArrayList<FichaButton> posiblesFichasAJugar = new ArrayList<>();
+    Random random = new Random();
+    int indiceRandom;
+
+    if (this.tablero.isEmpty()) {
+        VBox vbox = (VBox) JPane.getChildren().get(1);
+        return (FichaButton) vbox.getChildren().get(random.nextInt(vbox.getChildren().size()));
+    } else {
+        checkLeft = this.getLeftMostNum();
+        checkRight = this.getRightMostNum();
+
+        JPane.getChildren().stream()
                 .filter(node -> node instanceof VBox)
                 .map(node -> (VBox) node)
                 .flatMap(vbox -> vbox.getChildren().stream())
@@ -355,20 +357,40 @@ public class Tablero{
                 .map(posibleButtons -> (FichaButton) posibleButtons)
                 .filter(fichaButton -> fichaButton.getFichaReferenciada() != null)
                 .forEach((fichaButton) -> {
-                    if (fichaButton.getFichaReferenciada().getLado2()==checkLeft || fichaButton.getFichaReferenciada().getLado1()==checkRight) {
+                    if (fichaButton.getFichaReferenciada().getLado2() == checkLeft || fichaButton.getFichaReferenciada().getLado1() == checkRight) {
                         posiblesFichasAJugar.add(fichaButton);
                     }
                 });
-            if (posiblesFichasAJugar.isEmpty()) {
-                return null;
-            }else{
-                indiceRandom = random.nextInt(posiblesFichasAJugar.size());
+
+        // Si no se encuentran fichas jugables, verifica si hay una ficha comodín
+        if (posiblesFichasAJugar.isEmpty()) {
+            posiblesFichasAJugar.addAll(obtenerComodines(JPane));
+        }
+
+        if (posiblesFichasAJugar.isEmpty()) {
+            return null;
+        } else {
+            indiceRandom = random.nextInt(posiblesFichasAJugar.size());
+        }
+
+        return posiblesFichasAJugar.get(indiceRandom);
+    }
+}
+     private List<FichaButton> obtenerComodines(Pane JPane) {
+    VBox vbox = (VBox) JPane.getChildren().get(1);
+    List<FichaButton> comodines = new ArrayList<>();
+    
+    for (Node node : vbox.getChildren()) {
+        if (node instanceof FichaButton) {
+            FichaButton fichaButton = (FichaButton) node;
+            if (fichaButton.getFichaReferenciada() instanceof FichaComodin) {
+                comodines.add(fichaButton);
             }
-            System.out.println(indiceRandom);
-            return posiblesFichasAJugar.get(indiceRandom);
         }
     }
-     
+
+    return comodines;
+}
     public Jugador generarTurnoAleatorio(Jugador j1,Jugador j2){
         Random random = new Random();
         int r = random.nextInt(2);
